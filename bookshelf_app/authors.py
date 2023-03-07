@@ -2,6 +2,7 @@ from flask import jsonify, request
 from webargs.flaskparser import use_args
 from bookshelf_app import app, db
 from bookshelf_app.models import Author, AuthorSchema, author_schema
+from bookshelf_app.utils import validate_json_content_type
 
 
 @app.route('/api/v1/authors', methods=["GET"])
@@ -25,7 +26,8 @@ def get_author(author_id):
 
 
 @app.route('/api/v1/authors', methods=["POST"])
-@use_args(author_schema)
+@validate_json_content_type
+@use_args(author_schema, error_status_code=400)
 def create_author(args: dict):
     author = Author(**args)
 

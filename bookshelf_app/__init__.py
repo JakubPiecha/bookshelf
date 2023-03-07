@@ -14,6 +14,6 @@ migrate = Migrate(app, db)
 #     for row in results:
 #         print(row)
 
-from bookshelf_app import authors, models, db_manage_commands
+from bookshelf_app import authors, models, db_manage_commands, errors
 
 
