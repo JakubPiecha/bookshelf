@@ -10,9 +10,12 @@ itsdangerous==2.1.2
 Jinja2==3.1.2
 Mako==1.2.4
 MarkupSafe==2.1.2
+marshmallow==3.19.0
+packaging==23.0
 pycparser==2.21
 PyMySQL==1.0.2
 python-dotenv==1.0.0
 SQLAlchemy==2.0.5.post1
 typing_extensions==4.5.0
+webargs==8.2.0
 Werkzeug==2.2.3
