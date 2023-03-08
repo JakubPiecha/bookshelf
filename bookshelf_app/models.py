@@ -82,13 +82,13 @@ class Author(db.Model):
         pagination = {
             'total_pages': paginate_obj.pages,
             'total_records': paginate_obj.total,
-            'current_page': url_for('get_authors', page=page, **params),
+            'current_page': url_for('authors.get_authors', page=page, **params),
         }
         if paginate_obj.has_next:
-            pagination['next_page'] = url_for('get_authors', page=page+1, **params)
+            pagination['next_page'] = url_for('authors.get_authors', page=page+1, **params)
 
         if paginate_obj.has_prev:
-            pagination['prev_page'] = url_for('get_authors', page=page-1, **params)
+            pagination['prev_page'] = url_for('authors.get_authors', page=page-1, **params)
         return paginate_obj.items, pagination
 
 class AuthorSchema(Schema):

@@ -2,18 +2,26 @@ from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-# from sqlalchemy.sql import text
 
-app = Flask(__name__)
-app.config.from_object(Config)
 
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-# with app.app_context():
-#     results = db.session.execute(text('show databases'))
-#     for row in results:
-#         print(row)
+db = SQLAlchemy()
+migrate = Migrate()
 
-from bookshelf_app import authors, models, db_manage_commands, errors
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(config_class)
+
+    db.init_app(app)
+    migrate.init_app(app, db)
+
+    from bookshelf_app.commands import db_manage_bp
+    from bookshelf_app.errors import errors_bp
+    from bookshelf_app.authors import authors_bp
+    app.register_blueprint(db_manage_bp)
+    app.register_blueprint(errors_bp)
+    app.register_blueprint(authors_bp, url_prefix='/api/v1')
+
+    return app
+
 
 

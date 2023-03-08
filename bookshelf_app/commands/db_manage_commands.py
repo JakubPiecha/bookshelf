@@ -3,12 +3,12 @@ from pathlib import Path
 from datetime import datetime
 
 from sqlalchemy import text
-
-from bookshelf_app import app, db
+from bookshelf_app import db
 from bookshelf_app.models import Author
+from bookshelf_app.commands import db_manage_bp
 
 
-@app.cli.group()
+@db_manage_bp.cli.group()
 def db_manage():
     '''Database managment commands'''
     pass
@@ -16,7 +16,7 @@ def db_manage():
 def add_data():
     '''Add data to database'''
     try:
-        authors_path = Path(__file__).parent / 'samples' / 'authors.json'
+        authors_path = Path(__file__).parent.parent / 'samples' / 'authors.json'
         with open(authors_path) as file:
             data_json = json.load(file)
 
