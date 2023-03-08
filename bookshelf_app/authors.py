@@ -8,7 +8,8 @@ from bookshelf_app.utils import validate_json_content_type
 @app.route('/api/v1/authors', methods=["GET"])
 def get_authors():
     authors = Author.query.all()
-    author_schema = AuthorSchema(many=True)
+    schema_args = Author.get_schema_args(request.args.get('fields'))
+    author_schema = AuthorSchema(**schema_args)
     return jsonify({
         'success': True,
         'data': author_schema.dump(authors),
