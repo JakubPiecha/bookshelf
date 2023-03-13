@@ -4,7 +4,8 @@ from webargs.flaskparser import use_args
 from bookshelf_app import db
 from bookshelf_app.books import books_bp
 from bookshelf_app.models import Book, BookSchema, book_schema, Author
-from bookshelf_app.utils import get_schema_args, apply_order, apply_filter, get_pagination, validate_json_content_type
+from bookshelf_app.utils import get_schema_args, apply_order, apply_filter, get_pagination, validate_json_content_type, \
+    token_required
 
 
 @books_bp.route('/books', methods=["GET"])
@@ -33,9 +34,10 @@ def get_book(book_id):
 
 
 @books_bp.route('/books/<int:book_id>', methods=["PUT"])
+@token_required
 @validate_json_content_type
 @use_args(book_schema, error_status_code=400)
-def update_book(args, book_id):
+def update_book(user_id, args, book_id):
     book = Book.query.get_or_404(book_id, description=f'Book with id {book_id} not found')
     if book.isbn != args['isbn']:
         if Book.query.filter(Book.isbn == args['isbn']).first():
@@ -58,7 +60,8 @@ def update_book(args, book_id):
 
 
 @books_bp.route('/books/<int:book_id>', methods=['DELETE'])
-def delete_book(book_id):
+@token_required
+def delete_book(user_id, book_id):
     book = Book.query.get_or_404(book_id, description=f'Book with id {book_id} not found')
     db.session.delete(book)
     db.session.commit()
@@ -80,9 +83,10 @@ def all_books_author(author_id):
 
 
 @books_bp.route('/author/<int:author_id>/books', methods=['POST'])
+@token_required
 @validate_json_content_type
 @use_args(BookSchema(exclude=['author_id']), error_status_code=400)
-def create_book(args, author_id):
+def create_book(user_id, args, author_id):
     Author.query.get_or_404(author_id, description=f'Author with id {author_id} not found')
 
     if Book.query.filter(Book.isbn == args['isbn']).first():

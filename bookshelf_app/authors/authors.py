@@ -4,7 +4,8 @@ from webargs.flaskparser import use_args
 from bookshelf_app import db
 from bookshelf_app.authors import authors_bp
 from bookshelf_app.models import Author, AuthorSchema, author_schema
-from bookshelf_app.utils import validate_json_content_type, get_schema_args, apply_order, apply_filter, get_pagination
+from bookshelf_app.utils import validate_json_content_type, get_schema_args, apply_order, apply_filter, get_pagination, \
+    token_required
 
 
 @authors_bp.route('/authors', methods=["GET"])
@@ -33,9 +34,10 @@ def get_author(author_id):
 
 
 @authors_bp.route('/authors', methods=["POST"])
+@token_required
 @validate_json_content_type
 @use_args(author_schema, error_status_code=400)
-def create_author(args: dict):
+def create_author(user_id, args: dict):
     author = Author(**args)
 
     db.session.add(author)
@@ -48,9 +50,10 @@ def create_author(args: dict):
 
 
 @authors_bp.route('/authors/<int:author_id>', methods=["PUT"])
+@token_required
 @validate_json_content_type
 @use_args(author_schema, error_status_code=400)
-def update_author(args: dict, author_id):
+def update_author(user_id, args: dict, author_id):
     author = Author.query.get_or_404(author_id, description=f'Author with id {author_id} not found')
     author.first_name = args['first_name']
     author.last_name = args['last_name']
@@ -65,7 +68,8 @@ def update_author(args: dict, author_id):
 
 
 @authors_bp.route('/authors/<int:author_id>', methods=["DELETE"])
-def delete_author(author_id):
+@token_required
+def delete_author(user_id, author_id):
     author = Author.query.get_or_404(author_id, description=f'Author with id {author_id} not found')
     db.session.delete(author)
     db.session.commit()
