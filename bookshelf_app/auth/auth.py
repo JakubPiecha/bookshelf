@@ -29,6 +29,7 @@ def register(args):
         'token': token
     })
 
+
 @auth_bp.route('/login', methods=['POST'])
 @validate_json_content_type
 @use_args(UserSchema(only=['username', 'password']), error_status_code=400)
@@ -46,6 +47,7 @@ def login(args):
         'token': token
     })
 
+
 @auth_bp.route('/user', methods=['GET'])
 @token_required
 def get_current_user(user_id):
@@ -55,6 +57,7 @@ def get_current_user(user_id):
         'success': True,
         'data': user_schema.dump(user)
     })
+
 
 @auth_bp.route('/change/password', methods=['PUT'])
 @token_required
@@ -73,6 +76,7 @@ def change_user_password(user_id, args):
         'data': user_schema.dump(user)
     })
 
+
 @auth_bp.route('/change/data', methods=['PUT'])
 @token_required
 @validate_json_content_type
@@ -85,7 +89,6 @@ def change_user_data(user_id, args):
     if user.email != args['email']:
         if User.query.filter(User.email == args['email']).first():
             abort(409, description=f'User with email {args["email"]} already exists')
-
 
     user.username = args['username']
     user.email = args['email']
