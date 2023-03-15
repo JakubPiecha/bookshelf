@@ -4,10 +4,10 @@ from bookshelf_app.errors import errors_bp
 
 
 class ErrorResponse:
-    def __init__(self, massage: str, http_status: int):
+    def __init__(self, message: str, http_status: int):
         self.payload = {
             'success': False,
-            'massage': massage
+            'message': message
         }
         self.http_status = http_status
 
@@ -19,8 +19,8 @@ class ErrorResponse:
 
 @errors_bp.app_errorhandler(400)
 def bad_request_error(err):
-    massages = err.data.get('messages', {}).get('json', {})
-    return ErrorResponse(massages, 400).to_response()
+    messages = err.data.get('messages', {}).get('json', {})
+    return ErrorResponse(messages, 400).to_response()
 
 
 @errors_bp.app_errorhandler(401)

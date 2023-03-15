@@ -19,7 +19,7 @@ def load_json_data(file_name):
 
 @db_manage_bp.cli.group()
 def db_manage():
-    '''Database managment commands'''
+    '''Database management commands'''
     pass
 @db_manage.command()
 def add_data():

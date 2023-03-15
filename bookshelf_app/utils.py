@@ -3,11 +3,10 @@ import jwt
 from functools import wraps
 
 from flask import request, url_for, current_app, abort
-from flask_sqlalchemy import DefaultMeta
+from flask_sqlalchemy.model import DefaultMeta
 from flask_sqlalchemy.query import Query
 from werkzeug.exceptions import UnsupportedMediaType
 
-from config import Config
 
 COMPARISON_OPERATORS_RE = re.compile(r'(.*)\[(gte|gt|lte|lt)\]')
 

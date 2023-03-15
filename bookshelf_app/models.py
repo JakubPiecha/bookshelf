@@ -16,7 +16,6 @@ class Author(db.Model):
     birth_date = db.Column(db.Date, nullable=False)
     books = db.relationship('Book', back_populates='author', cascade='all, delete-orphan')
 
-
     def __repr__(self):
         return f'{self.__class__.__name__}: {self.first_name} {self.last_name}'
 
@@ -47,6 +46,7 @@ class Book(db.Model):
     def additional_validation(param, value):
         return value
 
+
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -54,6 +54,7 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     creation_date = db.Column(db.DateTime, default=datetime.utcnow)
+
     @staticmethod
     def generate_hashed_password(password):
         return generate_password_hash(password)
@@ -67,6 +68,7 @@ class User(db.Model):
             'exp': datetime.utcnow() + timedelta(minutes=current_app.config.get('JWT_EXPIRED_MINUTES', 30))
         }
         return jwt.encode(payload, current_app.config.get('SECRET_KEY'))
+
     def __repr__(self):
         return f'{self.username}'
 
@@ -98,12 +100,14 @@ class BookSchema(Schema):
         if len(str(value)) != 13:
             raise ValidationError(f'ISBN must contains 13 digits')
 
+
 class UserSchema(Schema):
     id = fields.Integer(dump_only=True)
     username = fields.String(required=True, validate=validate.Length(max=255))
     email = fields.Email(required=True)
     password = fields.String(required=True, load_only=True, validate=validate.Length(min=6, max=255))
     creation_date = fields.DateTime(dump_only=True)
+
 
 class UserPasswordChangeSchema(Schema):
     current_password = fields.String(required=True, load_only=True, validate=validate.Length(min=6, max=255))
@@ -114,4 +118,3 @@ author_schema = AuthorSchema()
 book_schema = BookSchema()
 user_schema = UserSchema()
 user_pasword_change_chema = UserPasswordChangeSchema()
-
