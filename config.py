@@ -26,7 +26,17 @@ class TestingConfig(Config):
     DEBUG = True
     TESTING = True
 
+class ProductionConfig(Config):
+    HOST_DB = os.environ.get('HOST_DB')
+    PASSWORD_DB = os.environ.get('PASSWORD_DB')
+    DB_USERNAME = os.environ.get('DB_USERNAME')
+    DB_NAME = os.environ.get('DB_NAME')
+    SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{DB_USERNAME}:{PASSWORD_DB}@{HOST_DB}/{DB_NAME}?charset=utf8mb4'
+
+
+
 config = {
     'development': DevelopmentConfig,
-    'testing': TestingConfig
+    'testing': TestingConfig,
+    'production': ProductionConfig
 }
