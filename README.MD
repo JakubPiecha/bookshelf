@@ -2,7 +2,7 @@
 
 
 # BOOKSHELF
-
+Application made as part of the udemy course.
 REST API for library.
 Documentation can be found in documentation.html or [here](https://documenter.getpostman.com/view/26035390/2s93Jxr1qX)
 
